@@ -4,8 +4,8 @@ class ProductController{
 
     static create(req, res, next){
 
-        const {name, description, price, quantity, image} = req.body
-        Product.create({name, description, price, quantity, image})
+        const {name, description, price, stock, image} = req.body
+        Product.create({name, description, price, stock, image})
         .then(product=>{
             res.status(201).json(product)
         })
@@ -32,7 +32,7 @@ class ProductController{
         req.body.name && (updatedData.name =req.body.name)
         req.body.description && (updatedData.description =req.body.description)
         req.body.price && (updatedData.price =req.body.price)
-        req.body.quantity && (updatedData.quantity =req.body.quantity)
+        req.body.stock && (updatedData.stock =req.body.stock)
         req.body.image && (updatedData.image =req.body.image)
         
 
