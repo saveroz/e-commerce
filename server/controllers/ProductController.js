@@ -4,7 +4,12 @@ class ProductController{
 
     static create(req, res, next){
 
-        const {name, description, price, stock, image} = req.body
+        console.log('masuk ke product create')
+        let image=null
+        if (req.file){
+            image = req.file.cloudStoragePublicUrl
+        }
+        const {name, description, price, stock} = req.body
         Product.create({name, description, price, stock, image})
         .then(product=>{
             res.status(201).json(product)
@@ -27,15 +32,17 @@ class ProductController{
 
         const id = req.params.id
 
+        if (req.file){
+            req.file.cloudStoragePublicUrl && (updatedData.image=req.file.cloudStoragePublicUrl)
+        }
+
         let updatedData = {}
 
         req.body.name && (updatedData.name =req.body.name)
         req.body.description && (updatedData.description =req.body.description)
         req.body.price && (updatedData.price =req.body.price)
         req.body.stock && (updatedData.stock =req.body.stock)
-        req.body.image && (updatedData.image =req.body.image)
         
-
         Product.findByIdAndUpdate(id, updatedData, {new:true})
         .then(success=>{
             res.status(200).json(success)

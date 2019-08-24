@@ -1,11 +1,17 @@
 const express = require('express')
 const router = express.Router()
 const ProductController = require('../controllers/ProductController')
+const authentication = require('../middleware/authentication')
+const authorization = require('../middleware/authorization')
+const adminAuthorization = require('../middleware/adminAuthorization')
+const {sendUploadToGCS,multer} = require('../middleware/images')
+
+router.use(authentication)
 
 router.get('/', ProductController.getAll)
-router.post('/', ProductController.create)
-router.patch('/:id', ProductController.update)
-router.delete('/:id', ProductController.delete)
+router.post('/', adminAuthorization,multer.single('image'),sendUploadToGCS,ProductController.create)
+router.patch('/:id',adminAuthorization,multer.single('image'),sendUploadToGCS, ProductController.update)
+router.delete('/:id', adminAuthorization, ProductController.delete)
 
 
 module.exports = router

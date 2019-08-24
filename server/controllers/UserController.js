@@ -79,7 +79,8 @@ class UserController{
                 let userdata = {
                     'username' : user.username,
                     'id' : user._id,
-                    'email' : user.email
+                    'email' : user.email,
+                    'role' :user.role
                 }
                 let token = jwt.sign(userdata,Secret)
                 res.status(200).json({token,message:"You have Successfully Login"})       

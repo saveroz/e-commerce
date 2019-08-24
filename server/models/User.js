@@ -31,11 +31,7 @@ const UserSchema = new Schema({
     password : String,
     role : {
         type : String
-    },
-    products : [{
-        type : Schema.Types.ObjectId,
-        ref : "Product"
-    }]
+    }
 },{
     timestamps : true,
     versionKey :false
@@ -44,6 +40,12 @@ const UserSchema = new Schema({
 UserSchema.pre('save', function(next){
     let password = generatePass (this.password)
     this.password = password
+    next()
+})
+
+UserSchema.pre('save', function(next){
+ 
+    this.role = "customer"
     next()
 })
 const User = mongoose.model("User", UserSchema)

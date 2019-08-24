@@ -15,7 +15,7 @@
                     <label for="pwd">Password:</label>
                     <input type="password" class="form-control" v-model="password">
                 </div>
-                <center><button class="btn btn-lg btn-secondary btn-block" type="submit">Register</button></center>
+                <center><button type="submit" class="btn btn-default" style="background-color: #0f0e0ec5; color : rgb(255, 255, 255);" >register</button> </center>
                 <hr>
                 <hr>
                 <center><span>Already have an account?</span></center>
@@ -26,9 +26,52 @@
 </template>
 
 <script>
-
+import axios from "axios"
 export default {
 
+    data (){
+        return {
+            username : "",
+            email :"",
+            password : ""
+        }
+    },
+    methods : {
+        changeToLoginForm(){
+            this.$emit("fromRegisterForm", true)
+        },
+        register(){
+            let username = this.username
+            let email = this.email
+            let password = this.password
+
+            axios({
+                url : "http://34.87.39.22/users/register",
+                method : 'POST',
+                data : {
+                    username, email, password
+                } 
+            })
+            .then(response=>{
+                Swal.fire({
+                    type: 'success',
+                    title: 'Register success !',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                console.log(response)
+            })
+            .catch(err=>{
+                let message = (err.response.data.message)
+                // swal("Error!", errMessage , "error")
+                Swal.fire({
+                    type: 'error',
+                    title: 'register failed !',
+                    text : message
+                })
+            })
+        }
+    }
 
 }
 </script>
