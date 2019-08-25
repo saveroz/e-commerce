@@ -5,11 +5,27 @@ class CartController{
 
     static create(req, res, next){
 
+        console.log(req.body)
         let UserId = req.decode.id
         const {ProductId,amount} = req.body
-        Cart.create({ProductId,amount,UserId})
-        .then(product=>{
-            res.status(201).json(product)
+        let status = false
+        Cart.findOne({ProductId,status})
+        .then(cart=>{
+            // console.log(cart,"masuk ke cart create")
+
+            if (cart){
+                console.log("masuk ke false", cart.status)
+                let totalAmount = Number(cart.amount)+ Number(amount)
+                return cart.updateOne({amount:totalAmount},{new:true})
+            }
+            else{
+                console.log("masuk ke true")
+                return Cart.create({ProductId,amount,UserId})
+
+            }
+        })
+        .then(response=>{
+            res.status(201).json(response)
         })
         .catch(next)
     }
@@ -31,8 +47,8 @@ class CartController{
 
         let updatedData = {}
 
-        req.body.name && (updatedData.name =req.body.name)
-        req.body.description && (updatedData.description =req.body.description)
+        req.body.ProductId && (updatedData.ProductId =req.body.ProductId)
+        req.body.amount && (updatedData.amount =req.body.amount)
         
         Cart.findByIdAndUpdate(id, updatedData, {new:true})
         .then(success=>{
@@ -42,8 +58,11 @@ class CartController{
     }
 
     static getAll(req, res, next){
-
-        Cart.find()
+        
+        let UserId = req.decode.id
+        Cart.find({
+            UserId
+        }).populate("ProductId")
         .then(allCart=>{
             res.status(200).json(allCart)
         })

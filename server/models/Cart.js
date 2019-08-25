@@ -4,21 +4,30 @@ const Schema = mongoose.Schema
 const cartSchema = new Schema ({
     UserId : {
         type : Schema.Types.ObjectId,
-        ref : "User"
+        ref : "User",
+        required : true
     },
     ProductId : {
         type : Schema.Types.ObjectId,
-        ref : "Product"
+        ref : "Product",
+        required : true
     },
     amount :  {
         type : Number,
         required : true
+    },
+    status : {
+        type : Boolean,
     },
 },{
     timestamps : true,
     versionKey : false
 })
 
+cartSchema.pre('save', function(next){
+    this.status = false
+    next()
+})
 
 const Cart = mongoose.model("Cart", cartSchema)
 

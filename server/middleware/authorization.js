@@ -1,23 +1,21 @@
-const Product = require('../models/Product.js')
+const Cart = require('../models/Cart')
 
 
 function authorization(req,res,next){
-
-
     
-    // console.log(req.decode)
+    console.log("masuk ke authorization")
     let id = req.params.id
-    console.log(req.decode.id)
-    console.log(req.params.id ,"id article")
-    Product.findOne({
+    // console.log(req.decode.id)
+    console.log(req.params.id )
+    Cart.findOne({
         '_id':id,
         'UserId': req.decode.id 
     })
-    .then(article=>{
-        console.log(article)
-        if (!article){
+    .then(cart=>{
+        console.log(cart)
+        if (!cart){
             console.log('masuk ke null')
-            res.status(401).json(`${req.decode.username} not authorized please check carefully`)
+            res.status(401).json({message : `You are not authorized please check carefully`})
         }
         else{
             next()
@@ -26,7 +24,7 @@ function authorization(req,res,next){
     })
     .catch(err=>{
         console.log("masuk ke catch")
-        res.status(500).json(err)
+        res.status(401).json({message : `You are not authorized please check carefully`})
     })
 }
 

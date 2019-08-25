@@ -6,6 +6,7 @@ function authentication(req,res,next){
     try {
 
         // console.log(req.headers.token)
+        // console.log(req.body)
         const token = req.headers.token
         const decode = jwt.verify(token, Secret)
         req.decode = decode

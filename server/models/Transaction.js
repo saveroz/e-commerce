@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
+const Cart = require('../models/Cart')
 const Schema = mongoose.Schema
+const Product = require('../models/Product')
+
 
 const transactionSchema = new Schema ({
     UserId : {
@@ -7,13 +10,13 @@ const transactionSchema = new Schema ({
         ref : "User",
         required : true
     },
-    cartId : {
+    CartId : [{
         type : Schema.Types.ObjectId,
         ref : "Cart",
         required : true
-    },
-    TotalPrice: {
-        type : true,
+    }],
+    totalPrice: {
+        type : Number,
         required: true
     }
 },{
@@ -21,6 +24,23 @@ const transactionSchema = new Schema ({
     versionKey : false
 })
 
+// transactionSchema.pre("save", function(next){
+
+//     let UserId = this.UserId
+
+//     Cart.find({UserId})
+//     .then(allcarts=>{
+
+//         for(let cart of allcarts){
+
+//             Product.update()
+            
+//         }
+
+//     })
+
+
+// })
 
 const Transaction = mongoose.model("Transaction", transactionSchema)
 

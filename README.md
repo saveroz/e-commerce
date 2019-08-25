@@ -121,7 +121,7 @@ Body :
    none
 success :
    status: 200
-   message: 'delete successfull'
+   message: 'delete successfully'
 error:
    status: 404
    message: 'failed to delete data'

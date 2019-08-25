@@ -1,11 +1,11 @@
 <template>
   <div >
-    <div>
-      <navbar></navbar>
+    <navbar></navbar>
+    <router-view/>
+     <!-- <div>
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    </div> -->
   </div>
 </template>
 
@@ -17,6 +17,28 @@ export default {
   components :{
     navbar,
     login
+  },
+  data (){
+    return{
+
+    }
+  },
+  methods : {
+
+    getStatusLogin(){
+      let token = localStorage.getItem('token')
+      if(token){
+        this.$store.commit("LOGIN_STATUS", true)
+      }
+      else{
+         this.$store.commit("LOGIN_STATUS", false)
+
+      }
+    }
+
+  },
+  created (){
+    this.getStatusLogin()
   }
   
 }

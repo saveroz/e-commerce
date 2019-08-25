@@ -19,7 +19,6 @@ class UserController{
             res.status(201).json({message:"You have successfully registered account",user})
         })
         .catch(next)
-
     }
 
     static GooglesignIn(req, res, next){
@@ -83,7 +82,7 @@ class UserController{
                     'role' :user.role
                 }
                 let token = jwt.sign(userdata,Secret)
-                res.status(200).json({token,message:"You have Successfully Login"})       
+                res.status(200).json({token,username:user.username,message:"You have Successfully Login"})       
                 // res.status(200).json("you have success to login")
             }
             else{

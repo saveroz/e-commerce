@@ -58,6 +58,18 @@ class ProductController{
         })
         .catch(next)
     }
+
+    static getOne(req, res, next){
+        let id = req.params.id
+
+        Product.findById(id)
+        .then(product=>{
+            res.status(200).json(product)
+        })
+        .catch(next)
+
+
+    }
 }
 
 module.exports = ProductController
