@@ -3,10 +3,10 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import router from './router'
 
-const users_url = 'http://localhost:3000/users/'
-const products_url = 'http://localhost:3000/products/'
-const cart_url = 'http://localhost:3000/carts'
-const transaction_url = 'http://localhost:3000/transactions'
+const users_url = 'http://35.192.45.25/users/'
+const products_url = 'http://35.192.45.25/products/'
+const cart_url = 'http://35.192.45.25/carts'
+const transaction_url = 'http://35.192.45.25/transactions'
 
 Vue.use(Vuex)
 

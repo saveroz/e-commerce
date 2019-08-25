@@ -77,7 +77,7 @@ export default {
       this.$store.dispatch('createTransaction', payload)
     },
     removeCart (id) {
-      // console.log(id);
+      console.log(id);
       Vue.swal
         .fire({
           title: 'Are you sure?',
