@@ -4,7 +4,7 @@
     <center>
 <div class="row">
 <product v-for="product in allProducts" :key="product.id" v-bind:product="product"></product>
-  </div> 
+  </div>
     </center>
   </div>
 </template>
@@ -13,15 +13,15 @@
 import product from './product'
 
 export default {
-  components : {
+  components: {
     product
   },
-  mounted: function() {
-    this.$store.dispatch("getAllProducts")
+  mounted: function () {
+    this.$store.dispatch('getAllProducts')
   },
-  computed : {
+  computed: {
 
-    allProducts(){
+    allProducts () {
       return this.$store.state.allProducts
     }
   }

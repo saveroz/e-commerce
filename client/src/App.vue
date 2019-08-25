@@ -13,34 +13,32 @@
 import navbar from './components/navbar'
 import login from './components/loginForm'
 export default {
-  name :"app",
-  components :{
+  name: 'app',
+  components: {
     navbar,
     login
   },
-  data (){
-    return{
+  data () {
+    return {
 
     }
   },
-  methods : {
+  methods: {
 
-    getStatusLogin(){
+    getStatusLogin () {
       let token = localStorage.getItem('token')
-      if(token){
-        this.$store.commit("LOGIN_STATUS", true)
-      }
-      else{
-         this.$store.commit("LOGIN_STATUS", false)
-
+      if (token) {
+        this.$store.commit('LOGIN_STATUS', true)
+      } else {
+        this.$store.commit('LOGIN_STATUS', false)
       }
     }
 
   },
-  created (){
+  created () {
     this.getStatusLogin()
   }
-  
+
 }
 </script>
 

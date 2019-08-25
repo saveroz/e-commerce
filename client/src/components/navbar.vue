@@ -34,16 +34,15 @@
             :text="UsernameLogin || 'User'"
             right
           >
-           
+
            <b-dropdown-item @click="goToProfilePage">Profile</b-dropdown-item>
-            
+
             <b-dropdown-item @click="userSignOut">Sign Out</b-dropdown-item>
             <b-dropdown-item @click="goToCartPage">Cart</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    
 
     <!-- Modal untuk register ke e-commerce  -->
     <b-modal id="modal-register" v-model="isRegisterModalActive">
@@ -92,76 +91,76 @@
 
 <script>
 // import { mapState } from "vuex";
-import Vue from "vue";
+import Vue from 'vue'
 
 export default {
-  data() {
+  data () {
     return {
-      username : "",
+      username: '',
       isLogin: false,
       isRegisterModalActive: false,
       isLoginModalActive: false,
       registerForm: {
-        username: "",
-        email: "",
-        password: ""
+        username: '',
+        email: '',
+        password: ''
       },
       loginForm: {
-        email: "",
-        password: ""
+        email: '',
+        password: ''
       }
-    };
+    }
   },
   methods: {
-    userLogin() {
-      this.$store.dispatch("userLogin", this.loginForm);
-      this.isLoginModalActive = false;
-      Vue.swal.showLoading();
+    userLogin () {
+      this.$store.dispatch('userLogin', this.loginForm)
+      this.isLoginModalActive = false
+      Vue.swal.showLoading()
       this.username = this.$store.state.username
     },
 
-    userRegister() {
-      this.$store.dispatch("userRegister", this.registerForm);
-      this.isRegisterModalActive = false;
-      Vue.swal.showLoading();
+    userRegister () {
+      this.$store.dispatch('userRegister', this.registerForm)
+      this.isRegisterModalActive = false
+      Vue.swal.showLoading()
     },
-    userSignOut() {
-      Vue.swal.showLoading();
-      localStorage.removeItem("token");
-      this.$store.commit("LOGIN_STATUS", false);
-      this.$router.push({ path: "/" });
-      Vue.swal.close();
+    userSignOut () {
+      Vue.swal.showLoading()
+      localStorage.removeItem('token')
+      this.$store.commit('LOGIN_STATUS', false)
+      this.$router.push({ path: '/' })
+      Vue.swal.close()
       Vue.swal.fire({
-        type: "success",
-        title: "You Have Logged Out !",
+        type: 'success',
+        title: 'You Have Logged Out !',
         showConfirmButton: false,
         timer: 1500
-      });
+      })
     },
-    goToCartPage() {
-      this.$router.push({ path: "/usercarts" });
+    goToCartPage () {
+      this.$router.push({ path: '/usercarts' })
     },
-    goToProfilePage(){
-      this.$router.push({path:"/userProfile"})
+    goToProfilePage () {
+      this.$router.push({ path: '/userProfile' })
     }
   },
   computed: {
-    loginStatus() {
-      let status = this.$store.state.isLogin;
-      console.log(status);
+    loginStatus () {
+      let status = this.$store.state.isLogin
+      console.log(status)
       if (status) {
-        this.$bvModal.hide("modal-login");
+        this.$bvModal.hide('modal-login')
       }
     },
-    UsernameLogin(){
+    UsernameLogin () {
       return this.$store.state.username
     }
 
   },
-  created: function(){
-      this.username = this.$store.state.username
+  created: function () {
+    this.username = this.$store.state.username
   }
-};
+}
 </script>
 
 <style scoped>

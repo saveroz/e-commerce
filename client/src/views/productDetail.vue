@@ -43,63 +43,63 @@
 </template>
 
 <script>
-import navbar from "../components/navbar";
-import product from "../components/product";
-import convertToDollar from "../helpers/convertDollar";
-import Vue from "vue";
+import navbar from '../components/navbar'
+import product from '../components/product'
+import convertToDollar from '../helpers/convertDollar'
+import Vue from 'vue'
 
 export default {
-  name: "productsPage",
-  data() {
+  name: 'productsPage',
+  data () {
     return {
       amount: 0,
-      ProductId: ""
+      ProductId: ''
       // product : this.theProduct.id
-    };
+    }
   },
   methods: {
-    addToCart() {
-      let product = this.$store.state.productDetails;
+    addToCart () {
+      let product = this.$store.state.productDetails
       // console.log(product._id)
-      let loginStatus = this.$store.state.isLogin;
+      let loginStatus = this.$store.state.isLogin
       let cart = {
         amount: this.amount,
         ProductId: product._id
-      };
+      }
 
       if (loginStatus) {
         Vue.swal.fire({
-          title: "Adding To Your Cart",
+          title: 'Adding To Your Cart',
           allowOutsideClick: () => !Vue.swal.isLoading()
-        });
-        Vue.swal.showLoading();
+        })
+        Vue.swal.showLoading()
 
-        this.$store.dispatch("addToCart", cart);
+        this.$store.dispatch('addToCart', cart)
       } else {
         Vue.swal.fire({
-          type: "error",
-          title: "You have to log in first!",
+          type: 'error',
+          title: 'You have to log in first!',
           showConfirmButton: false,
           timer: 1500
-        });
+        })
         // console.log("You have to login first")
       }
     },
-    changeToDollar(Number) {
-      return convertToDollar(Number);
+    changeToDollar (Number) {
+      return convertToDollar(Number)
     }
   },
   computed: {
-    theProduct() {
-      this.productId = this.$store.state.productDetails._id;
-      return this.$store.state.productDetails;
+    theProduct () {
+      this.productId = this.$store.state.productDetails._id
+      return this.$store.state.productDetails
     }
   },
-  mounted() {
-    let id = this.$route.params.id;
-    this.$store.dispatch("getOneProduct", id);
+  mounted () {
+    let id = this.$route.params.id
+    this.$store.dispatch('getOneProduct', id)
   }
-};
+}
 </script>
 
 <style>

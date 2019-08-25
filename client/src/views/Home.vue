@@ -19,11 +19,11 @@ export default {
     loginForm,
     productsList,
     navbar
-    
+
   },
-  data(){
-    return{
-      isLogin : false,
+  data () {
+    return {
+      isLogin: false
     }
   }
 }

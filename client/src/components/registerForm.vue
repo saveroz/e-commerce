@@ -20,58 +20,58 @@
                 <hr>
                 <center><span>Already have an account?</span></center>
                 <center><span>Login <a href="#" @click="changeToLoginForm()" >here</a> </span></center>
-                <hr>     
+                <hr>
             </form>
         </div>
 </template>
 
 <script>
-import axios from "axios"
+import axios from 'axios'
 export default {
 
-    data (){
-        return {
-            username : "",
-            email :"",
-            password : ""
-        }
-    },
-    methods : {
-        changeToLoginForm(){
-            this.$emit("fromRegisterForm", true)
-        },
-        register(){
-            let username = this.username
-            let email = this.email
-            let password = this.password
-
-            axios({
-                url : "http://34.87.39.22/users/register",
-                method : 'POST',
-                data : {
-                    username, email, password
-                } 
-            })
-            .then(response=>{
-                Swal.fire({
-                    type: 'success',
-                    title: 'Register success !',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                console.log(response)
-            })
-            .catch(err=>{
-                let message = (err.response.data.message)
-                // swal("Error!", errMessage , "error")
-                Swal.fire({
-                    type: 'error',
-                    title: 'register failed !',
-                    text : message
-                })
-            })
-        }
+  data () {
+    return {
+      username: '',
+      email: '',
+      password: ''
     }
+  },
+  methods: {
+    changeToLoginForm () {
+      this.$emit('fromRegisterForm', true)
+    },
+    register () {
+      let username = this.username
+      let email = this.email
+      let password = this.password
+
+      axios({
+        url: 'http://34.87.39.22/users/register',
+        method: 'POST',
+        data: {
+          username, email, password
+        }
+      })
+        .then(response => {
+          Swal.fire({
+            type: 'success',
+            title: 'Register success !',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          console.log(response)
+        })
+        .catch(err => {
+          let message = (err.response.data.message)
+          // swal("Error!", errMessage , "error")
+          Swal.fire({
+            type: 'error',
+            title: 'register failed !',
+            text: message
+          })
+        })
+    }
+  }
 
 }
 </script>

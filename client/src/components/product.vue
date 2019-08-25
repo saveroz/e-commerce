@@ -9,7 +9,7 @@
   </div>
     <router-view/>
   <div class="card-footer">
-     <router-link :to="'/productDetail/'+product._id" :detailedProduct="product" ><button class="btn btn-secondary" >Details</button></router-link> 
+     <router-link :to="'/productDetail/'+product._id" :detailedProduct="product" ><button class="btn btn-secondary" >Details</button></router-link>
      <!-- <router-view/> -->
   </div>
 
@@ -21,16 +21,16 @@
 import convertToDollar from '../helpers/convertDollar'
 
 export default {
-    name : "product",
-    props: {
-        product : Object
-    },
-    methods : {
+  name: 'product',
+  props: {
+    product: Object
+  },
+  methods: {
 
-      changeToDollar(Number){
-        return convertToDollar(Number)
-      }
+    changeToDollar (Number) {
+      return convertToDollar(Number)
     }
+  }
 
 }
 </script>

@@ -12,26 +12,26 @@
           </center>
 
         <!-- <router-view></router-view> -->
-        
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import cartList from "../components/cartList";
+import cartList from '../components/cartList'
 export default {
-  name: "UserCarts",
+  name: 'UserCarts',
   components: {
     cartList
   },
-  data() {
-    return {};
+  data () {
+    return {}
   },
-  mounted() {
-    this.$store.dispatch("getAllCarts");
+  mounted () {
+    this.$store.dispatch('getAllCarts')
   }
-};
+}
 </script>
 
 <style>

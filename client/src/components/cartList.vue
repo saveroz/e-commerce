@@ -38,83 +38,83 @@
 </template>
 
 <script>
-import convertToDollar from "../helpers/convertDollar";
+import convertToDollar from '../helpers/convertDollar'
 import Vue from 'vue'
 export default {
-  name: "cartList",
-  data() {
+  name: 'cartList',
+  data () {
     return {
       totalPrice: 0,
       allCarts: []
-    };
+    }
   },
   methods: {
-    getSubTotal(cart) {
-      let number = Number(cart.amount * cart.ProductId.price);
+    getSubTotal (cart) {
+      let number = Number(cart.amount * cart.ProductId.price)
       //   console.log(this.totalPrice);
-      return convertToDollar(number);
+      return convertToDollar(number)
     },
-    getTotalPrice() {
-      return convertToDollar(this.totalPrice);
+    getTotalPrice () {
+      return convertToDollar(this.totalPrice)
     },
-    createTransaction() {
-      let totalPrice = this.totalPrice;
-      let CartId = [];
+    createTransaction () {
+      let totalPrice = this.totalPrice
+      let CartId = []
       for (let cart of this.allCarts) {
-        CartId.push(cart._id);
+        CartId.push(cart._id)
       }
       let payload = {
         totalPrice,
         CartId
-      };
+      }
 
       Vue.swal.fire({
-              title: 'Creating your transactions...',
-              allowOutsideClick: () => !Vue.swal.isLoading()
-            })
-            Vue.swal.showLoading()
-    
-      this.$store.dispatch("createTransaction", payload);
+        title: 'Creating your transactions...',
+        allowOutsideClick: () => !Vue.swal.isLoading()
+      })
+      Vue.swal.showLoading()
+
+      this.$store.dispatch('createTransaction', payload)
     },
-    removeCart(id) {
+    removeCart (id) {
       // console.log(id);
       Vue.swal
         .fire({
-          title: "Are you sure?",
+          title: 'Are you sure?',
           text: "You won't be able to revert this!",
-          type: "warning",
+          type: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!"
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
         })
         .then(result => {
           if (result.value) {
             // console.log("masuk ke delete")
-            this.$store.dispatch("removeCart", id);
+            this.$store.dispatch('removeCart', id)
           }
-        });
+        })
     }
   },
   computed: {
-    getAllCarts() {
-      return this.$store.state.allCarts;
+    getAllCarts () {
+      return this.$store.state.allCarts
     },
-    getTotalPriceComputed() {
-      this.allCarts = this.$store.state.allCarts;
+    getTotalPriceComputed () {
+      this.allCarts = this.$store.state.allCarts
 
-      let allCarts = this.allCarts;
-      this.totalPrice = 0;
+      let allCarts = this.allCarts
+      this.totalPrice = 0
       for (let cart of allCarts) {
-        let price = cart.amount * cart.ProductId.price;
-        this.totalPrice += price;
+        let price = cart.amount * cart.ProductId.price
+        this.totalPrice += price
       }
 
-      return convertToDollar(this.totalPrice);
+      return convertToDollar(this.totalPrice)
     }
   },
-  mounted() {
-    this.allCarts = this.$store.state.allCarts;
+  mounted () {
+    this.allCarts = this.$store.state.allCarts
     //   let allCarts = this.allCarts;
     // //   let this.totalPrice = 0;
     //   for (let cart of allCarts) {
@@ -122,7 +122,7 @@ export default {
     //     this.totalPrice += price;
     //   }
   },
-  created() {
+  created () {
     //   this.allCarts = this.$store.state.allCarts;
     //   let allCarts = this.allCarts;
     // //   let this.totalPrice = 0;
@@ -131,7 +131,7 @@ export default {
     //     this.totalPrice += price;
     //   }
   }
-};
+}
 </script>
 
 <style>

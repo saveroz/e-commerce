@@ -9,6 +9,7 @@
       <th scope="col">Quantity</th>
       <th scope="col">Price</th>
       <th scope="col">Total Price</th>
+      <th scope='col'>Date</th>
     </tr>
   </thead>
   <tbody>
@@ -18,41 +19,44 @@
       <td><li v-for="(cart,index) in transaction.CartId" :key="index">{{cart.amount}}</li></td>
       <td><li v-for="(cart,index) in transaction.CartId" :key="index">{{changeToDollar(cart.ProductId.price)}}</li></td>
       <td>{{changeToDollar(transaction.totalPrice)}}</td>
+      <td>{{convertDate(transaction.createdAt)}}</td>
     </tr>
-    
+
   </tbody>
 </table>
 
 </div>
-  
+
 </template>
 
 <script>
-import convertToDollar from "../helpers/convertDollar";
+import convertToDollar from '../helpers/convertDollar'
 
 export default {
-  name : "transactionHistoryPage",
-  data(){
-    return{
+  name: 'transactionHistoryPage',
+  data () {
+    return {
 
     }
   },
-  methods : {
+  methods: {
 
-    changeToDollar(Number) {
-      return convertToDollar(Number);
+    changeToDollar (Number) {
+      return convertToDollar(Number)
+    },
+    convertDate (date) {
+      return new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
     }
   },
-  computed : {
+  computed: {
 
-    userTransactions(){
+    userTransactions () {
       return this.$store.state.userTransactions
     }
-    
 
   },
-  mounted(){
-    this.$store.dispatch("getAllUserTransactions")
+  mounted () {
+    this.$store.dispatch('getAllUserTransactions')
   }
 
 }

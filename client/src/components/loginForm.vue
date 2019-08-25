@@ -43,59 +43,59 @@
   <!-- Default form login -->
 </template>
 <script>
-import axios from "axios";
-import GoogleSignInButton from "vue-google-signin-button-directive";
-import GSignInButton from "vue-google-signin-button";
+import axios from 'axios'
+import GoogleSignInButton from 'vue-google-signin-button-directive'
+import GSignInButton from 'vue-google-signin-button'
 // import Swal from "sweetalert2"
 
 export default {
-    directives: {
+  directives: {
     GoogleSignInButton
   },
-  data() {
+  data () {
     return {
-        clientId:
-          "323874734298-vrlavakg3iqb6ig2qbp22c7ijisk1pd9.apps.googleusercontent.com",
+      clientId:
+          '323874734298-vrlavakg3iqb6ig2qbp22c7ijisk1pd9.apps.googleusercontent.com',
       googleSignInParams: {
         clientId:
-          "323874734298-vrlavakg3iqb6ig2qbp22c7ijisk1pd9.apps.googleusercontent.com"
+          '323874734298-vrlavakg3iqb6ig2qbp22c7ijisk1pd9.apps.googleusercontent.com'
       },
-      inputEmail: "",
-      inputPassword: "",
+      inputEmail: '',
+      inputPassword: '',
       isInit: false,
       isSignIn: false
-    };
+    }
   },
   methods: {
 
-    OnGoogleAuthSuccess(idToken) {
+    OnGoogleAuthSuccess (idToken) {
       // Receive the idToken and make your magic with the backend
       console.log(idToken)
       axios({
-        method: "POST",
-        url: "http://34.87.39.22/users/signIn",
+        method: 'POST',
+        url: 'http://34.87.39.22/users/signIn',
         data: {
-            idToken
+          idToken
         }
-        })
+      })
         .then(response => {
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("author", response.data.author);
-          this.$emit("fromLoginFormLoginCond", true)
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('author', response.data.author)
+          this.$emit('fromLoginFormLoginCond', true)
         })
         .catch(err => {
-            console.log("error")
+          console.log('error')
         })
     },
-    OnGoogleAuthFail(error) {
-      console.log(error);
+    OnGoogleAuthFail (error) {
+      console.log(error)
     },
-    login() {
-      console.log(this.inputEmail, this.inputPassword);
-      let email = this.inputEmail;
-      let password = this.inputPassword;
+    login () {
+      console.log(this.inputEmail, this.inputPassword)
+      let email = this.inputEmail
+      let password = this.inputPassword
       axios({
-        method: "POST",
+        method: 'POST',
         url: `http://34.87.39.22/users/login`,
         data: {
           email,
@@ -104,31 +104,31 @@ export default {
       })
         .then(response => {
           Swal.fire({
-                    type: 'success',
-                    title: 'Login success !',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-          console.log(response.data);
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("author", response.data.author);
-          this.$emit("fromLoginFormLoginCond", true);
+            type: 'success',
+            title: 'Login success !',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          console.log(response.data)
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('author', response.data.author)
+          this.$emit('fromLoginFormLoginCond', true)
         })
         .catch(err => {
-          let message = err.response.data.message;
+          let message = err.response.data.message
           Swal.fire({
-                    type: 'error',
-                    title: 'Login failed !',
-                    text:message
-                })
-        });
+            type: 'error',
+            title: 'Login failed !',
+            text: message
+          })
+        })
     },
-    showRegisterForm() {
-      this.$emit("fromLoginFormRegisterCond", false);
-    },
-   
+    showRegisterForm () {
+      this.$emit('fromLoginFormRegisterCond', false)
+    }
+
   },
-  mounted() {
+  mounted () {
     // let that = this
     // let checkGauthLoad = setInterval(function(){
     //   that.isInit = that.$gAuth.isInit
@@ -136,7 +136,7 @@ export default {
     //   if(that.isInit) clearInterval(checkGauthLoad)
     // }, 1000);
   }
-};
+}
 </script>
 <style>
 .google-signin-button {

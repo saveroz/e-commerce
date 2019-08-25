@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from "axios"
+import axios from 'axios'
 import router from './router'
 
-const users_url = "http://localhost:3000/users/"
-const products_url = "http://localhost:3000/products/"
-const cart_url = "http://localhost:3000/carts"
-const transaction_url = "http://localhost:3000/transactions"
+const users_url = 'http://localhost:3000/users/'
+const products_url = 'http://localhost:3000/products/'
+const cart_url = 'http://localhost:3000/carts'
+const transaction_url = 'http://localhost:3000/transactions'
 
 Vue.use(Vuex)
 
@@ -17,37 +17,35 @@ export default new Vuex.Store({
     allProducts: [],
     productDetails: {},
     allCarts: [],
-    username :""
+    username: ''
   },
   mutations: {
 
-    LOGIN_STATUS(state, payload) {
+    LOGIN_STATUS (state, payload) {
       // console.log(payload)
       state.isLogin = payload
     },
-    ALL_PRODUCTS(state, payload) {
+    ALL_PRODUCTS (state, payload) {
       state.allProducts = payload
     },
-    PRODUCT_DETAILS(state, payload) {
+    PRODUCT_DETAILS (state, payload) {
       state.productDetails = payload
     },
-    ALL_CARTS(state, payload) {
+    ALL_CARTS (state, payload) {
       state.allCarts = payload
-    }
-    ,
-    ALL_USER_TRANSACTIONS(state, payload) {
+    },
+    ALL_USER_TRANSACTIONS (state, payload) {
       state.userTransactions = payload
     },
 
-    USERNAME_LOGIN(state,payload){
+    USERNAME_LOGIN (state, payload) {
       state.username = payload
     }
-
 
   },
   actions: {
 
-    userLogin({ commit }, payload) {
+    userLogin ({ commit }, payload) {
       let email = payload.email
       let password = payload.password
 
@@ -62,7 +60,7 @@ export default new Vuex.Store({
           let username = response.data.username
           localStorage.setItem('token', token)
           commit('LOGIN_STATUS', true)
-          commit("USERNAME_LOGIN", username)
+          commit('USERNAME_LOGIN', username)
           Vue.swal.close()
           Vue.swal.fire({
             type: 'success',
@@ -74,9 +72,8 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
-
     },
-    userRegister({ commit }, payload) {
+    userRegister ({ commit }, payload) {
       console.log(payload)
       let email = payload.email
       let password = payload.password
@@ -84,7 +81,7 @@ export default new Vuex.Store({
 
       axios({
         url: `${users_url}/register`,
-        method: "POST",
+        method: 'POST',
         data: {
           email,
           password,
@@ -111,16 +108,15 @@ export default new Vuex.Store({
           })
         })
     },
-    getAllProducts({ commit }) {
-
+    getAllProducts ({ commit }) {
       axios({
         url: `${products_url}`,
-        method: "GET",
+        method: 'GET'
       })
         .then(response => {
           console.log(response.data)
           let products = response.data
-          commit("ALL_PRODUCTS", products)
+          commit('ALL_PRODUCTS', products)
         })
         .catch(err => {
           console.log(err)
@@ -133,8 +129,7 @@ export default new Vuex.Store({
           })
         })
     },
-    getOneProduct({ commit }, id) {
-
+    getOneProduct ({ commit }, id) {
       axios({
         url: `${products_url}/${id}`,
         method: 'GET'
@@ -146,10 +141,8 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
-
     },
-    addToCart({ commit }, payload) {
-
+    addToCart ({ commit }, payload) {
       let token = localStorage.getItem('token')
       // console.log(payload,"masuk ke addtocart di store")
       axios({
@@ -182,8 +175,7 @@ export default new Vuex.Store({
           // console.log(err,"masuk ke error addtocart")
         })
     },
-    getAllCarts({ commit }) {
-
+    getAllCarts ({ commit }) {
       let token = localStorage.getItem('token')
       axios({
         method: 'GET',
@@ -201,8 +193,7 @@ export default new Vuex.Store({
               cartsNotBought.push(cart)
             }
           }
-          commit("ALL_CARTS", cartsNotBought)
-
+          commit('ALL_CARTS', cartsNotBought)
         })
         .catch(err => {
           // console.log(err.response.data.message)
@@ -215,12 +206,12 @@ export default new Vuex.Store({
           })
         })
     },
-    removeCart({ commit, dispatch }, id) {
+    removeCart ({ commit, dispatch }, id) {
       let token = localStorage.getItem('token')
       // console.log("di dispatch",id)
       axios({
         url: `${cart_url}/${id}`,
-        method: "DELETE",
+        method: 'DELETE',
         headers: { token }
       })
         .then(response => {
@@ -231,7 +222,6 @@ export default new Vuex.Store({
             'Your Cart has been deleted.',
             'success'
           )
-
         })
         .catch(err => {
           // console.log(err)
@@ -244,13 +234,12 @@ export default new Vuex.Store({
           })
         })
     },
-    createTransaction({ commit,dispatch }, payload) {
-
+    createTransaction ({ commit, dispatch }, payload) {
       let token = localStorage.getItem('token')
 
       axios({
         url: `${transaction_url}`,
-        method: "POST",
+        method: 'POST',
         data: payload,
         headers: {
           token
@@ -266,7 +255,6 @@ export default new Vuex.Store({
             timer: 1500
           })
           dispatch('getAllCarts')
-
         })
         .catch(err => {
           // console.log(err.response.data.message)
@@ -279,22 +267,21 @@ export default new Vuex.Store({
           })
         })
     },
-    getAllUserTransactions({commit}){
+    getAllUserTransactions ({ commit }) {
       let token = localStorage.getItem('token')
 
       axios({
-        url : `${transaction_url}`,
-        method : "GET",
-        headers : {token}
+        url: `${transaction_url}`,
+        method: 'GET',
+        headers: { token }
       })
-      .then(response=>{
-        let allTransactions = response.data
-        commit("ALL_USER_TRANSACTIONS",allTransactions)
-
-      })
-      .catch(err=>{
-        console.log(err)
-      })
+        .then(response => {
+          let allTransactions = response.data
+          commit('ALL_USER_TRANSACTIONS', allTransactions)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 })
