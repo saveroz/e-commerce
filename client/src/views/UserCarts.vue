@@ -4,11 +4,11 @@
       <div class="col col-md-8">
         <h2 class="text-center mb-4">Your Carts</h2>
         <cartList></cartList>
+        <!-- <button class="btn btn-secondary" @click="goToProfilePage">Go to Transaction</button> -->
       </div>
       <div class="col col-md-4">
           <center>
-        <h2>Garpit for Life</h2>
-
+        <button class="btn btn-secondary mt-4" @click="goToProfilePage">Go to Profile Page</button>
           </center>
 
         <!-- <router-view></router-view> -->
@@ -27,6 +27,12 @@ export default {
   },
   data () {
     return {}
+  },
+  methods: {
+      goToProfilePage(){
+          this.$router.push({ path: '/userProfile' })
+      }
+
   },
   mounted () {
     this.$store.dispatch('getAllCarts')
