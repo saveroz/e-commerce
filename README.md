@@ -1,7 +1,16 @@
 # e-commerce
 
+##Link Deploy
+ e-commerce.saveroz.com 
+
+## Usage
+```javascript
+$ npm install
+$ npm run dev
+```
+
 ## REST API
-All end point routes start with http://localhost:3000
+All end point routes start with http://35.192.45.25 
 ## /users end point
 
 ### **Register New User**
