@@ -4,6 +4,7 @@
  e-commerce.saveroz.com 
 
 ## Usage
+on server
 ```javascript
 $ npm install
 $ npm run dev
