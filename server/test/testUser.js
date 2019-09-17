@@ -6,7 +6,7 @@ const User = require('../models/User')
 
 chai.use(chaiHttp)
 
-after(function(done){
+before(function(done){
     User.deleteMany()
     .then(response=>{
         console.log(response)

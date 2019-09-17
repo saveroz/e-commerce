@@ -10,9 +10,14 @@
           <b-nav-item>
             <router-link class="text-secondary" to="/">Home</router-link>
           </b-nav-item>
+          <b-nav-item>
+            <button class="navbar-toggler sidebar-toggler" type="button" data-toggle="sidebar-show">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </b-nav-item>
           <!-- <b-nav-item>
             <router-link class="text-secondary" to="/about">About Us</router-link>
-          </b-nav-item> -->
+          </b-nav-item>-->
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -34,8 +39,7 @@
             :text="UsernameLogin || 'User'"
             right
           >
-
-           <b-dropdown-item @click="goToProfilePage">Profile</b-dropdown-item>
+            <b-dropdown-item @click="goToProfilePage">Profile</b-dropdown-item>
 
             <b-dropdown-item @click="userSignOut">Sign Out</b-dropdown-item>
             <b-dropdown-item @click="goToCartPage">Cart</b-dropdown-item>
@@ -86,81 +90,128 @@
         <b-button variant="primary" data-dismiss="modal" type="submit" form="userLoginForm">Confirm</b-button>
       </div>
     </b-modal>
+
+    <!-- <div class="sidebar">
+      <nav class="sidebar-nav">
+        <ul class="nav">
+          <li class="nav-title">Nav Title</li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="nav-icon cui-speedometer"></i> Nav item
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="nav-icon cui-speedometer"></i> With badge
+              <span class="badge badge-primary">NEW</span>
+            </a>
+          </li>
+          <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#">
+              <i class="nav-icon cui-puzzle"></i> Nav dropdown
+            </a>
+            <ul class="nav-dropdown-items">
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i class="nav-icon cui-puzzle"></i> Nav dropdown item
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i class="nav-icon cui-puzzle"></i> Nav dropdown item
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item mt-auto">
+            <a class="nav-link nav-link-success" href="https://coreui.io">
+              <i class="nav-icon cui-cloud-download"></i> Download CoreUI
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-danger" href="https://coreui.io/pro/">
+              <i class="nav-icon cui-layers"></i> Try CoreUI
+              <strong>PRO</strong>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+    </div> -->
   </div>
 </template>
 
 <script>
 // import { mapState } from "vuex";
-import Vue from 'vue'
+import Vue from "vue";
 
 export default {
-  data () {
+  data() {
     return {
-      username: '',
+      username: "",
       isLogin: false,
       isRegisterModalActive: false,
       isLoginModalActive: false,
       registerForm: {
-        username: '',
-        email: '',
-        password: ''
+        username: "",
+        email: "",
+        password: ""
       },
       loginForm: {
-        email: '',
-        password: ''
+        email: "",
+        password: ""
       }
-    }
+    };
   },
   methods: {
-    userLogin () {
-      this.$store.dispatch('userLogin', this.loginForm)
-      this.isLoginModalActive = false
-      Vue.swal.showLoading()
-      this.username = this.$store.state.username
+    userLogin() {
+      this.$store.dispatch("userLogin", this.loginForm);
+      this.isLoginModalActive = false;
+      Vue.swal.showLoading();
+      this.username = this.$store.state.username;
     },
 
-    userRegister () {
-      this.$store.dispatch('userRegister', this.registerForm)
-      this.isRegisterModalActive = false
-      Vue.swal.showLoading()
+    userRegister() {
+      this.$store.dispatch("userRegister", this.registerForm);
+      this.isRegisterModalActive = false;
+      Vue.swal.showLoading();
     },
-    userSignOut () {
-      Vue.swal.showLoading()
-      localStorage.removeItem('token')
-      this.$store.commit('LOGIN_STATUS', false)
-      this.$router.push({ path: '/' })
-      Vue.swal.close()
+    userSignOut() {
+      Vue.swal.showLoading();
+      localStorage.removeItem("token");
+      this.$store.commit("LOGIN_STATUS", false);
+      this.$router.push({ path: "/" });
+      Vue.swal.close();
       Vue.swal.fire({
-        type: 'success',
-        title: 'You Have Logged Out !',
+        type: "success",
+        title: "You Have Logged Out !",
         showConfirmButton: false,
         timer: 1500
-      })
+      });
     },
-    goToCartPage () {
-      this.$router.push({ path: '/usercarts' })
+    goToCartPage() {
+      this.$router.push({ path: "/usercarts" });
     },
-    goToProfilePage () {
-      this.$router.push({ path: '/userProfile' })
+    goToProfilePage() {
+      this.$router.push({ path: "/userProfile" });
     }
   },
   computed: {
-    loginStatus () {
-      let status = this.$store.state.isLogin
-      console.log(status)
+    loginStatus() {
+      let status = this.$store.state.isLogin;
+      console.log(status);
       if (status) {
-        this.$bvModal.hide('modal-login')
+        this.$bvModal.hide("modal-login");
       }
     },
-    UsernameLogin () {
-      return this.$store.state.username
+    UsernameLogin() {
+      return this.$store.state.username;
     }
-
   },
-  created: function () {
-    this.username = this.$store.state.username
+  created: function() {
+    this.username = this.$store.state.username;
   }
-}
+};
 </script>
 
 <style scoped>
