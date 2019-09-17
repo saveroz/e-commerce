@@ -5,9 +5,10 @@ class ProductController{
     static create(req, res, next){
 
         console.log('masuk ke product create')
+        console.log(req.body.image)
         let image=null
         if (req.file){
-            image = req.file.cloudStoragePublicUrl
+            image = req.file.cloudStoragePublicUrl 
         }
         const {name, description, price, stock} = req.body
         Product.create({name, description, price, stock, image})

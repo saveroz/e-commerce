@@ -16,7 +16,7 @@ class UserController{
         
         User.create({username, email, password})
         .then(user=>{
-            res.status(201).json({message:"You have successfully registered account",user})
+            res.status(201).json({message: "You have succesffully registered",user})
         })
         .catch(next)
     }
@@ -66,12 +66,16 @@ class UserController{
 
         const {email, password} = req.body
         // console.log(email,password)
+        if(!email || !password){
+            let property = !email ? "email" : "password"
+            next({status : 400, message : "please input your "+property})
+        }
     
         User.findOne({email})
         .then(user=>{
 
             if (!user){
-                throw new Error ('email/password not found')
+                next({status:404, message : "You are not registered"})
             }
 
             else if (checkPassword(password,user.password)){
@@ -82,14 +86,11 @@ class UserController{
                     'role' :user.role
                 }
                 let token = jwt.sign(userdata,Secret)
-                res.status(200).json({token,username:user.username,message:"You have Successfully Login"})       
-                // res.status(200).json("you have success to login")
+                res.status(200).json({token,username:user.username,message:"You have Successfully Login"}) 
             }
             else{
-                // res.status(200).json("you have failed to login")
-                throw new Error ('email/password not found')
+                next({status : 401, message : "invalid email/password"})
             }
-            
         })
         .catch(err=>{
             console.log(err)

@@ -5,11 +5,11 @@ const { generatePass } = require('../helpers/encryptPass')
 const UserSchema = new Schema({
     username : {
         type : String,
-        required : true
+        required : [true, "username is required"]
     },
     email : {
         type :String,
-        required : true,
+        required : [true,"email is required"],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
         validate : {
             validator : function(){
@@ -29,12 +29,12 @@ const UserSchema = new Schema({
                         resolve(false)
                     })
                 })
-            }, message : "this email has been used"
+            }, message : "this email has been registered"
         }
     },
     password : {
         type : String,
-        required : true
+        required : [true, "password is required"]
     },
     role : {
         type : String
@@ -51,10 +51,12 @@ UserSchema.pre('save', function(next){
 })
 
 UserSchema.pre('save', function(next){
- 
-    this.role = "customer"
+    if (!this.role){
+        this.role = "customer"
+    }
     next()
 })
 const User = mongoose.model("User", UserSchema)
 
 module.exports = User
+

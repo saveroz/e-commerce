@@ -20,9 +20,18 @@ function errorHandler (err, req, res, next) {
       res.status(400).json({
         message :err.message
       })
+      // httpStatus = 400
+      // let message = err.errors.name.message
+      // let totalError = []
+      // for(let key in err.errors){
+      //     totalError.push(err.errors[key].message)
+      // }
+      // res.status(400).json({
+      //     totalError, message : "validation error"
+      // })
     }
     else {
-      res.status(err.code || 500).json({
+      res.status(err.status || 500).json({
         message : err.message
       })
     }

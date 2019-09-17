@@ -18,6 +18,7 @@ const getPublicUrl = (filename) => {
 const sendUploadToGCS = (req, res, next) => {
   // console.log(req.file ,"masuk ke upload GCS")
   if (!req.file) {
+    console.log("masuk ke next gcs =======================")
     return next()
   }
   else if (!req.file.mimetype.includes('image')) {
