@@ -15,7 +15,12 @@ const reviewSchema = new Schema({
         type : String,
         ref : "Product",
         required : true
-    }
+    },
+    rating : {
+        type : Number,
+        min : [0, "you cannot give a rating below 0"],
+        max : [5, "you cannot give a rating above 5"]
+    },
 },{
     timestamps : true,
     versionKey : false

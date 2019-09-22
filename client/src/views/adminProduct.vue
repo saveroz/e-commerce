@@ -118,7 +118,42 @@ export default {
       this.isImageModal = true;
     },
     removeProduct(id) {
-      this.$store.dispatch("removeProduct", id);
+
+      this.$swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        })
+        .then(result=>{
+          if(result.value){
+            this.$swal.showLoading()
+            this.$store.dispatch("removeProduct", id)
+            .then(success=>{
+              this.$swal.close()
+              this.$swal.fire({
+                type : "success",
+                title : "successfully remove product"
+              })
+            })
+            .catch(err=>{
+              this.$swal.close()
+              let message = err.response.data && err.response.data.message || "failed to remove product"
+              this.$swal.fire({
+                type : "error",
+                title : "failed to remove product",
+                text : message
+              })
+            })
+          }
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+
     },
     previewFile(event) {
       this.formCreate.image = event.target.files[0];
@@ -130,7 +165,6 @@ export default {
       this.formEdit.stock = product.stock;
       this.formEdit.price = product.price;
       this.formEdit.image = product.image;
-
       this.isEditModal = true;
     },
     editProduct() {
@@ -143,14 +177,26 @@ export default {
       bodyFormData.append("image", this.formEdit.image);
       bodyFormData.append("stock", this.formEdit.stock);
       bodyFormData.append("price", this.formEdit.price);
-      
+      this.$swal.showLoading()
       this.$store.dispatch("editProduct", {data:bodyFormData, id})
       .then(data=>{
           console.log(data)
           this.isEditModal=false
+          this.$swal.close()
+          this.$swal.fire({
+            type : "success",
+            title : "successfully to edit product"
+          })
       })
       .catch(err=>{
-          console.log(err)
+        this.$swal.close()
+        let message = err.response.data && err.response.data.message || "failed to edit product"
+          // console.log(err)
+        this.$swal.fire({
+          type : "error",
+          title : "failed to edit product",
+          text : message
+        })
       })
 
     },
@@ -162,6 +208,7 @@ export default {
       bodyFormData.append("image", this.formCreate.image);
       bodyFormData.append("stock", this.formCreate.stock);
       bodyFormData.append("price", this.formCreate.price);
+      this.$swal.showLoading()
       this.$store.dispatch("addProduct", bodyFormData)
       .then(() => {
         this.formCreate.name = "";
@@ -170,8 +217,21 @@ export default {
         this.formCreate.price = 0;
         this.formCreate.image = "";
         this.isCreateModal = false;
-        console.log("setelah then");
-      });
+        // console.log("setelah then");
+        this.$swal.close()
+        this.$swal.fire({
+          type : "success",
+          title : "successfully add product"
+        })
+      }).catch(err=>{
+        this.$swal.close()
+        let message = err.response.data && err.response.data.message || "failed to add product"
+        this.$swal.fire({
+          type : "error",
+          title : "failed to add product",
+          text : message
+        })
+      })
     }
   },
   computed: {

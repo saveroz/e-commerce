@@ -149,7 +149,7 @@
 
 <script>
 // import { mapState } from "vuex";
-import Vue from "vue";
+
 
 export default {
   data() {
@@ -196,23 +196,23 @@ export default {
     userLogin() {
       this.$store.dispatch("userLogin", this.loginForm);
       this.isLoginModalActive = false;
-      Vue.swal.showLoading();
+      this.$swal.showLoading();
     },
 
     userRegister() {
       this.$store.dispatch("userRegister", this.registerForm);
       this.isRegisterModalActive = false;
-      Vue.swal.showLoading();
+      this.$swal.showLoading();
     },
     userSignOut() {
-      Vue.swal.showLoading();
+      this.$swal.showLoading();
       localStorage.clear();
       this.$store.commit("LOGIN_STATUS", false);
       this.$store.commit("CURRENT_USER", { username: "", role: "" });
       this.$router.push({ path: "/" });
       this.username = "";
-      Vue.swal.close();
-      Vue.swal.fire({
+      this.$swal.close();
+      this.$swal.fire({
         type: "success",
         title: "You Have Logged Out !",
         showConfirmButton: false,

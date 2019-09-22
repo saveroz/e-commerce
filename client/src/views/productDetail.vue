@@ -23,7 +23,6 @@
                 :max="theProduct.stock"
                 style="width:4rem;"
               ></b-input>
-
               <v-btn
                 v-if="theProduct.stock>0"
                 color="#E0E0E0"
@@ -37,8 +36,37 @@
             </b-form>
           </div>
         </div>
+          <v-btn @click="isReviewModal=true" color="#E0E0E0">Give Review</v-btn>
+      </div>
+      <!-- <h3>Review</h3> -->
+      <div>
+      <review v-for="review in productReviews" :key="review._id" :review="review"></review>
+      
       </div>
     </center>
+
+    <!-- Modal untuk give review -->
+    <b-modal id="modal-review" v-model="isReviewModal">
+      <b-form @submit.prevent="addReview" id="reviewForm">
+        <b-form-group label="Enter your review" label-for="review">
+          <b-form-input type="text" v-model="reviewForm.content" placeholder="your review" required></b-form-input>
+        </b-form-group>
+        <b-form-group label="rating" label-for="person">
+          <b-form-input
+            type="number"
+            max="5"
+            min="0"
+            v-model="reviewForm.rating"
+            placeholder="rating"
+            required
+          ></b-form-input>
+        </b-form-group>
+      </b-form>
+      <div slot="modal-footer">
+        <b-button variant="primary" data-dismiss="modal" type="submit" form="reviewForm">Confirm</b-button>
+      </div>
+    </b-modal>
+
   </div>
 </template>
 
@@ -46,15 +74,22 @@
 import navbar from '../components/navbar'
 import product from '../components/product'
 import convertToDollar from '../helpers/convertDollar'
-import Vue from 'vue'
+import review from "../components/review"
 
 export default {
   name: 'productsPage',
+  components : {
+    review
+  },
   data () {
     return {
       amount: 0,
-      ProductId: ''
-      // product : this.theProduct.id
+      ProductId: '',
+      isReviewModal : false,
+      reviewForm : {
+        rating : 0,
+        content : ""
+      }
     }
   },
   methods: {
@@ -68,15 +103,15 @@ export default {
       }
 
       if (loginStatus) {
-        Vue.swal.fire({
+        this.$swal.fire({
           title: 'Adding To Your Cart',
-          allowOutsideClick: () => !Vue.swal.isLoading()
+          allowOutsideClick: () => !this.$swal.isLoading()
         })
-        Vue.swal.showLoading()
-
+        this.$swal.showLoading()
         this.$store.dispatch('addToCart', cart)
-      } else {
-        Vue.swal.fire({
+      } 
+      else {
+        this.$swal.fire({
           type: 'error',
           title: 'You have to log in first!',
           showConfirmButton: false,
@@ -87,12 +122,47 @@ export default {
     },
     changeToDollar (Number) {
       return convertToDollar(Number)
+    },
+    addReview(){
+      let ProductId = this.$route.params.id
+      let obj = {
+        ProductId,
+        content : this.reviewForm.content,
+        rating : this.reviewForm.rating
+      }
+      this.$swal.showLoading()
+      this.$store.dispatch("addReview", obj)
+      .then((success)=>{
+        this.reviewForm.content=""
+        this.reviewForm.rating=0
+        this.isReviewModal = false
+        this.$swal.close()
+        this.$swal.fire({
+          type : "success",
+          title : "success to post review"
+        })
+      })
+      .catch(err=>{
+        this.isReviewModal = false
+        this.$swal.close()
+        console.log(err)
+        let message = err.response.data && err.response.data.message || "failed to post review"
+        this.$swal.fire({
+          type : "error",
+          title : "Failed to Post Review",
+          text : message
+        })
+      })
     }
   },
   computed: {
     theProduct () {
       this.productId = this.$store.state.productDetails._id
       return this.$store.state.productDetails
+    },
+    productReviews(){
+      console.log(this.$store.state.productReviews)
+      return this.$store.state.productReviews
     }
   },
   mounted () {

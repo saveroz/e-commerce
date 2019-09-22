@@ -39,7 +39,7 @@
 
 <script>
 import convertToDollar from '../helpers/convertDollar'
-import Vue from 'vue'
+
 export default {
   name: 'cartList',
   data () {
@@ -68,18 +68,17 @@ export default {
         CartId
       }
 
-      Vue.swal.fire({
+      this.$swal.fire({
         title: 'Creating your transactions...',
-        allowOutsideClick: () => !Vue.swal.isLoading()
+        allowOutsideClick: () => !this.$swal.isLoading()
       })
-      Vue.swal.showLoading()
+      this.$swal.showLoading()
 
       this.$store.dispatch('createTransaction', payload)
     },
     removeCart (id) {
       console.log(id);
-      Vue.swal
-        .fire({
+      this.$swal.fire({
           title: 'Are you sure?',
           text: "You won't be able to revert this!",
           type: 'warning',
@@ -90,7 +89,6 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            // console.log("masuk ke delete")
             this.$store.dispatch('removeCart', id)
           }
         })
@@ -114,7 +112,7 @@ export default {
     }
   },
   mounted () {
-    this.allCarts = this.$store.state.allCarts
+    // this.allCarts = this.$store.state.allCarts
     //   let allCarts = this.allCarts;
     // //   let this.totalPrice = 0;
     //   for (let cart of allCarts) {

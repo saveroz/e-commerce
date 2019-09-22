@@ -13,6 +13,7 @@ const productSchema = new Schema ({
     stock : {
         type : Number,
         required : [true, "stock is required"],
+        min : [1, "you cannot add product with stock below 1"],
         validate : {
             validator : Number.isInteger,
             message : "please input integer only"
@@ -25,6 +26,7 @@ const productSchema = new Schema ({
     price : {
         type : Number,
         required : [true,"price is required"],
+        min : [1, "you cannot add product with this price"],
         validate : {
             validator : Number.isInteger,
             message : "please input integer only"

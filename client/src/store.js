@@ -21,6 +21,7 @@ export default new Vuex.Store({
     productDetails: {},
     allCarts: [],
     username : "",
+    productReviews : [],
     role : ""
   },
   mutations: {
@@ -48,6 +49,9 @@ export default new Vuex.Store({
     CURRENT_USER(state,payload){
       state.username = payload.username
       state.role = payload.role
+    },
+    PRODUCT_REVIEW(state, payload){
+      state.productReviews = payload
     }
 
   },
@@ -149,13 +153,14 @@ export default new Vuex.Store({
           })
         })
     },
-    getOneProduct ({ commit }, id) {
+    getOneProduct ({ commit, dispatch }, id) {
       axios({
         url: `${products_url}/${id}`,
         method: 'GET'
       })
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
+          dispatch("getReview", id)
           commit('PRODUCT_DETAILS', response.data)
         })
         .catch(err => {
@@ -164,7 +169,7 @@ export default new Vuex.Store({
     },
     addToCart ({ commit }, payload) {
       let token = localStorage.getItem('token')
-      // console.log(payload,"masuk ke addtocart di store")
+      console.log(payload,"masuk ke addtocart di store")
       axios({
         url: `${cart_url}`,
         method: 'POST',
@@ -181,9 +186,10 @@ export default new Vuex.Store({
             showConfirmButton: false,
             timer: 1500
           })
-          // console.log(response.data,"response data")
+          console.log(response.data,"response data")
         })
         .catch(err => {
+          console.log(err.response.data)
           let message = err.response.data.message
           Vue.swal.fire({
             type: 'error',
@@ -304,19 +310,23 @@ export default new Vuex.Store({
         })
     },
     removeProduct({commit, dispatch}, payload){
-      let token = localStorage.getItem("token")
-      let id = payload
-      axios({
-        url : `${products_url}/${id}`,
-        method : "DELETE",
-        headers : {token}
-      })
-      .then(response=>{
-        console.log(response.data)
-        dispatch("getAllProducts")
-      })
-      .catch(err=>{
-        console.log(err.response)
+
+      return new Promise((resolve, reject)=>{
+        let token = localStorage.getItem("token")
+        let id = payload
+        axios({
+          url : `${products_url}/${id}`,
+          method : "DELETE",
+          headers : {token}
+        })
+        .then(response=>{
+          // console.log(response.data)
+          resolve("success")
+          dispatch("getAllProducts")
+        })
+        .catch(err=>{
+          reject(err)
+        })
       })
     },
     addProduct({commit, dispatch}, payload){
@@ -388,7 +398,7 @@ export default new Vuex.Store({
       let id = payload.id
       let updatedData = payload.data
       // letpayload.data
-
+      Vue.swal.showLoading()
       axios({
         url : `${transaction_url}/${id}`,
         method : "PATCH",
@@ -397,12 +407,59 @@ export default new Vuex.Store({
       })
       .then(response=>{
         console.log(response.data)
+        Vue.swal.close()
+        Vue.swal.fire({
+          type : "success",
+          title : "update successfully"
+        })
         if (updatedData.status==="received"){
           dispatch("getAllUserTransactions")
         }
         else {
           dispatch("getAllTransactions")
         }
+      })
+      .catch(err=>{
+        console.log(err)
+        Vue.swal.close()
+        let message = err.response.data && err.response.data.message || "failed to update transactions"
+        Vue.swal.fire({
+          type : "error",
+          title : "failed to update transactions",
+          text : message
+        })
+      })
+    },
+    addReview({commit, dispatch}, payload){
+
+      return new Promise((resolve, reject)=>{
+        let token = localStorage.getItem("token")
+        let ProductId = payload.ProductId
+        axios({
+          url : `${base_url}/reviews`,
+          method : "POST",
+          headers : {token},
+          data : payload
+        })
+        .then(response=>{
+          console.log(response.data)
+          dispatch("getReview", ProductId)
+          resolve("success")
+        })
+        .catch(err=>{
+          reject(err)
+        })
+      })
+    },
+    getReview({commit, dispatch}, payload){
+      let id = payload
+      console.log(id)
+      axios({
+        url : `${base_url}/reviews/${id}`,
+        method : "GET"
+      })
+      .then(response=>{
+        commit("PRODUCT_REVIEW", response.data)
       })
       .catch(err=>{
         console.log(err)
