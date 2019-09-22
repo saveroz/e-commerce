@@ -3,21 +3,25 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import router from './router'
 
-const users_url = 'http://35.192.45.25/users/'
-const products_url = 'http://35.192.45.25/products/'
-const cart_url = 'http://35.192.45.25/carts'
-const transaction_url = 'http://35.192.45.25/transactions'
+const base_url = "http://localhost:3000"
+const users_url = `${base_url}/users/`
+const products_url = `${base_url}/products/`
+const cart_url = `${base_url}/carts`
+const transaction_url = `${base_url}/transactions`
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     userTransactions: [],
+    allTransactions : [],
     isLogin: false,
     allProducts: [],
+    tempProducts : [],
     productDetails: {},
     allCarts: [],
-    username: ''
+    username : "",
+    role : ""
   },
   mutations: {
 
@@ -27,6 +31,7 @@ export default new Vuex.Store({
     },
     ALL_PRODUCTS (state, payload) {
       state.allProducts = payload
+      state.tempProducts = payload
     },
     PRODUCT_DETAILS (state, payload) {
       state.productDetails = payload
@@ -37,9 +42,12 @@ export default new Vuex.Store({
     ALL_USER_TRANSACTIONS (state, payload) {
       state.userTransactions = payload
     },
-
-    USERNAME_LOGIN (state, payload) {
-      state.username = payload
+    ALL_ADMIN_TRANSACTIONS(state, payload){
+      state.allTransactions = payload
+    },
+    CURRENT_USER(state,payload){
+      state.username = payload.username
+      state.role = payload.role
     }
 
   },
@@ -57,10 +65,15 @@ export default new Vuex.Store({
         .then(response => {
           console.log(response.data)
           let token = response.data.token
-          let username = response.data.username
+          let obj = {
+            username : response.data.username,
+            role : response.data.role
+          }
           localStorage.setItem('token', token)
+          localStorage.setItem("username", obj.username)
+          localStorage.setItem("role", obj.role)
           commit('LOGIN_STATUS', true)
-          commit('USERNAME_LOGIN', username)
+          commit('CURRENT_USER', obj)
           Vue.swal.close()
           Vue.swal.fire({
             type: 'success',
@@ -71,6 +84,13 @@ export default new Vuex.Store({
         })
         .catch(err => {
           console.log(err)
+          Vue.swal.close()
+          let message = err.response.data.message || "please check your email / password again"
+          Vue.swal.fire({
+            type : "error",
+            title : "failed to login",
+            text : message
+          })
         })
     },
     userRegister ({ commit }, payload) {
@@ -114,7 +134,7 @@ export default new Vuex.Store({
         method: 'GET'
       })
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
           let products = response.data
           commit('ALL_PRODUCTS', products)
         })
@@ -271,7 +291,7 @@ export default new Vuex.Store({
       let token = localStorage.getItem('token')
 
       axios({
-        url: `${transaction_url}`,
+        url: `${transaction_url}/user`,
         method: 'GET',
         headers: { token }
       })
@@ -282,6 +302,111 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
+    },
+    removeProduct({commit, dispatch}, payload){
+      let token = localStorage.getItem("token")
+      let id = payload
+      axios({
+        url : `${products_url}/${id}`,
+        method : "DELETE",
+        headers : {token}
+      })
+      .then(response=>{
+        console.log(response.data)
+        dispatch("getAllProducts")
+      })
+      .catch(err=>{
+        console.log(err.response)
+      })
+    },
+    addProduct({commit, dispatch}, payload){
+
+      return new Promise((resolve,reject)=>{
+        let token = localStorage.getItem("token")
+        axios({
+          url : `${products_url}`,
+          method : "POST",
+          headers : {token},
+          data : payload
+        })
+        .then(response=>{
+          console.log("sebelum then")
+          console.log(response.data)
+          dispatch("getAllProducts")
+          resolve("success")
+        })
+        .catch(err=>{
+          // console.log(err.response.data)
+          reject(err)
+        })
+      })
+    },
+
+    editProduct({commit, dispatch}, payload){
+
+      return new Promise((resolve, reject)=>{
+
+        let id = payload.id
+        let data = payload.data
+        let token = localStorage.getItem("token")
+        axios({
+          url : `${products_url}/${id}`,
+          method : "PATCH",
+          headers : {token},
+          data 
+        })
+        .then(response=>{
+          console.log(response.data)
+          
+          dispatch("getAllProducts")
+          resolve("success")
+        })
+        .catch(err=>{
+          reject(err)
+        })
+      })
+    },
+    getAllTransactions({commit}, payload){
+
+      let token = localStorage.getItem("token")
+      axios({
+        url : `${transaction_url}`,
+        method : "GET",
+        headers : {token}
+      })
+      .then(response =>{
+        let transactions = response.data
+        commit("ALL_ADMIN_TRANSACTIONS", transactions)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    },
+    updateTransaction({commit, dispatch}, payload){
+
+      let token = localStorage.getItem("token")
+      let id = payload.id
+      let updatedData = payload.data
+      // letpayload.data
+
+      axios({
+        url : `${transaction_url}/${id}`,
+        method : "PATCH",
+        headers : {token},
+        data : updatedData
+      })
+      .then(response=>{
+        console.log(response.data)
+        if (updatedData.status==="received"){
+          dispatch("getAllUserTransactions")
+        }
+        else {
+          dispatch("getAllTransactions")
+        }
+      })
+      .catch(err=>{
+        console.log(err)
+      })
     }
   }
 })

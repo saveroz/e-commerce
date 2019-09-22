@@ -5,6 +5,10 @@ import productDetail from './views/productDetail.vue'
 import UserCarts from './views/UserCarts.vue'
 import userProfile from './views/userProfile'
 import transactionHistory from './views/transactionHistory'
+import admin from "./views/Admin"
+import adminProduct from "./views/adminProduct"
+import adminTransactions from "./views/adminTransactions"
+import store from "./store.js"
 
 Vue.use(Router)
 
@@ -18,32 +22,59 @@ export default new Router({
       component: Home
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }, {
       path: '/productDetail/:id',
       name: 'productDetail',
       component: productDetail
 
     },
-    {
-      path: '/usercarts',
-      name: 'UserCarts',
-      component: UserCarts
-    },
+
     {
       path: '/userProfile',
       name: 'userProfile',
       component: userProfile,
+      beforeEnter: (to, from, next) => {
+        let role = localStorage.getItem("role")
+        if (role == "customer") {
+          next()
+        }
+        else {
+          next(from.path)
+        }
+      },
       children: [{
         path: 'transactionHistory',
         name: 'transactionHistory',
         component: transactionHistory
+      },
+      {
+        path: 'usercarts',
+        name: 'UserCarts',
+        component: UserCarts
+      }]
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: admin,
+      beforeEnter: (to, from, next) => {
+        let role = localStorage.getItem("role")
+        if (role == "admin") {
+          next()
+        }
+        else {
+          next(from.path)
+        }
+      },
+      children: [{
+        path: "products",
+        name: "adminProducts",
+        component: adminProduct
+      }, {
+        path: "transactions",
+        name: "adminTransactions",
+        component: adminTransactions
       }]
     }
+
   ]
 })

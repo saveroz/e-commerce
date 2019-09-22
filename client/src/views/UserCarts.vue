@@ -1,19 +1,14 @@
 <template>
   <div class="container">
-    <div class="row mt-5">
-      <div class="col col-md-8">
+    <div class="row mt-2">
+      <div class="col">
         <h2 class="text-center mb-4">Your Carts</h2>
         <cartList></cartList>
         <!-- <button class="btn btn-secondary" @click="goToProfilePage">Go to Transaction</button> -->
       </div>
-      <div class="col col-md-4">
-          <center>
-        <button class="btn btn-secondary mt-4" @click="goToProfilePage">Go to Profile Page</button>
-          </center>
-
+      <!-- <div class="col col-md-4"> -->
         <!-- <router-view></router-view> -->
-
-      </div>
+      <!-- </div> -->
     </div>
   </div>
 </template>

@@ -61,16 +61,10 @@ class TransactionController {
 
         const id = req.params.id
 
-        if (req.file) {
-            req.file.cloudStoragePublicUrl && (updatedData.image = req.file.cloudStoragePublicUrl)
-        }
-
         let updatedData = {}
-
-        req.body.name && (updatedData.name = req.body.name)
-        req.body.description && (updatedData.description = req.body.description)
-        req.body.price && (updatedData.price = req.body.price)
-        req.body.stock && (updatedData.stock = req.body.stock)
+        console.log(req.body.status)
+        req.body.status && (updatedData.status = req.body.status)
+        
 
         Transaction.findByIdAndUpdate(id, updatedData, { new: true })
             .then(success => {
@@ -79,7 +73,7 @@ class TransactionController {
             .catch(next)
     }
 
-    static getAll(req, res, next) {
+    static getUser(req, res, next) {
         let UserId = req.decode.id
         Transaction.find({ UserId }).populate({
             path : "CartId",
@@ -103,6 +97,20 @@ class TransactionController {
             })
             .catch(next)
 
+    }
+    static getAll(req,res,next){
+        
+        Transaction.find().populate([{
+            path : "CartId",
+            populate : {
+                path : "ProductId",
+                select : "name price"
+            }
+        }, {path : "UserId", select:"username"}])
+            .then(allTransaction => {
+                res.status(200).json(allTransaction)
+            })
+            .catch(next)
     }
 }
 

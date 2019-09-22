@@ -4,7 +4,7 @@ function adminAuthorization(req,res,next){
    
         let role = req.decode.role
         // console.log(req.decode)
-        if (role==="admin"){
+        if (role==="admin" || req.body.status=="received"){
             next()
         }
         else{

@@ -8,42 +8,34 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item>
-            <router-link class="text-secondary" to="/">Home</router-link>
+            <router-link class="text-dark" to="/">
+              <v-btn>Home</v-btn>
+            </router-link>
           </b-nav-item>
-          <b-nav-item>
-            <button class="navbar-toggler sidebar-toggler" type="button" data-toggle="sidebar-show">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          </b-nav-item>
-          <!-- <b-nav-item>
-            <router-link class="text-secondary" to="/about">About Us</router-link>
-          </b-nav-item>-->
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
-        <b-navbar-nav class="mx-auto"></b-navbar-nav>
+        <b-navbar-nav class="mx-auto">
+          <b-nav-form>
+            <b-form-input size="sm" class="mr-sm-2" placeholder="Search" v-model="search"></b-form-input>
+            <!-- <b-button size="sm" class="btn btn-blue-grey" type="submit">Search</b-button> -->
+          </b-nav-form>
+        </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto mr-3">
           <b-nav-item v-if="!$store.state.isLogin" v-b-modal.modal-login>Login</b-nav-item>
-          <b-nav-item-dropdown v-if="isLogin" text="Lang" right>
-            <b-dropdown-item href="#">EN</b-dropdown-item>
-            <b-dropdown-item href="#">ES</b-dropdown-item>
-            <b-dropdown-item href="#">RU</b-dropdown-item>
-            <b-dropdown-item href="#">FA</b-dropdown-item>
-          </b-nav-item-dropdown>
 
           <b-nav-item v-if="!$store.state.isLogin" @click="isRegisterModalActive = true">Register</b-nav-item>
-          <b-nav-item-dropdown
-            v-if="$store.state.isLogin"
-            @click="isCreateModalActive = true"
-            :text="UsernameLogin || 'User'"
-            right
-          >
-            <b-dropdown-item @click="goToProfilePage">Profile</b-dropdown-item>
-
-            <b-dropdown-item @click="userSignOut">Sign Out</b-dropdown-item>
-            <b-dropdown-item @click="goToCartPage">Cart</b-dropdown-item>
-          </b-nav-item-dropdown>
+          <div style="display:flex;align-items:center;">
+            <b-nav-item disabled>
+              <v-btn text>{{username}}</v-btn>
+            </b-nav-item>
+            <b-nav-item v-if="$store.state.isLogin" @click.stop="drawer = !drawer">
+              <v-btn>
+                <v-icon large id="navperson">person_pin</v-icon>
+              </v-btn>
+            </b-nav-item>
+          </div>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -91,53 +83,67 @@
       </div>
     </b-modal>
 
-    <!-- <div class="sidebar">
-      <nav class="sidebar-nav">
-        <ul class="nav">
-          <li class="nav-title">Nav Title</li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="nav-icon cui-speedometer"></i> Nav item
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="nav-icon cui-speedometer"></i> With badge
-              <span class="badge badge-primary">NEW</span>
-            </a>
-          </li>
-          <li class="nav-item nav-dropdown">
-            <a class="nav-link nav-dropdown-toggle" href="#">
-              <i class="nav-icon cui-puzzle"></i> Nav dropdown
-            </a>
-            <ul class="nav-dropdown-items">
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i class="nav-icon cui-puzzle"></i> Nav dropdown item
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i class="nav-icon cui-puzzle"></i> Nav dropdown item
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item mt-auto">
-            <a class="nav-link nav-link-success" href="https://coreui.io">
-              <i class="nav-icon cui-cloud-download"></i> Download CoreUI
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-danger" href="https://coreui.io/pro/">
-              <i class="nav-icon cui-layers"></i> Try CoreUI
-              <strong>PRO</strong>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <button class="sidebar-minimizer brand-minimizer" type="button"></button>
-    </div> -->
+    <v-navigation-drawer v-model="drawer" right absolute temporary>
+      <v-list-item class="mt-5">
+        <v-list-item-avatar large>
+          <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+        </v-list-item-avatar>
+
+        <v-list-item-content class="ml-3">
+          <v-list-item-title>{{username}}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list dense>
+        <div v-if="$store.state.role==='customer'">
+          <v-list-item
+            @click="gotoPage(item.path)"
+            v-for="item in userItems"
+            :key="item.title"
+            link
+          >
+            <div style="display:flex">
+              <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </div>
+          </v-list-item>
+        </div>
+        <div v-if="$store.state.role=='admin'">
+          <v-list-item
+            @click="gotoPage(item.path)"
+            v-for="item in adminItems"
+            :key="item.title"
+            link
+          >
+            <div style="display:flex">
+              <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </div>
+          </v-list-item>
+        </div>
+        <v-list-item @click="userSignOut">
+          <v-list-item-icon>
+            <v-icon>person_pin</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <!-- </v-sheet> -->
   </div>
 </template>
 
@@ -148,7 +154,30 @@ import Vue from "vue";
 export default {
   data() {
     return {
-      username: "",
+      search: "",
+      drawer: null,
+      userItems: [
+        { title: "Home", icon: "dashboard", path: "/" },
+        {
+          title: "Carts",
+          icon: "shopping_cart",
+          path: "/userProfile/usercarts"
+        },
+        {
+          title: "Transactions",
+          icon: "credit_card",
+          path: "/userProfile/transactionHistory"
+        }
+      ],
+      adminItems: [
+        { title: "Admin", icon: "supervised_user_circle", path: "/admin" },
+        {
+          title: "Transactions",
+          icon: "credit_card",
+          path: "/admin/transactions"
+        },
+        { title: "Products", icon: "watch", path: "/admin/products" }
+      ],
       isLogin: false,
       isRegisterModalActive: false,
       isLoginModalActive: false,
@@ -168,7 +197,6 @@ export default {
       this.$store.dispatch("userLogin", this.loginForm);
       this.isLoginModalActive = false;
       Vue.swal.showLoading();
-      this.username = this.$store.state.username;
     },
 
     userRegister() {
@@ -178,9 +206,11 @@ export default {
     },
     userSignOut() {
       Vue.swal.showLoading();
-      localStorage.removeItem("token");
+      localStorage.clear();
       this.$store.commit("LOGIN_STATUS", false);
+      this.$store.commit("CURRENT_USER", { username: "", role: "" });
       this.$router.push({ path: "/" });
+      this.username = "";
       Vue.swal.close();
       Vue.swal.fire({
         type: "success",
@@ -190,10 +220,14 @@ export default {
       });
     },
     goToCartPage() {
-      this.$router.push({ path: "/usercarts" });
+      this.$router.push({ path: "/userProfile/usercarts" });
     },
     goToProfilePage() {
       this.$router.push({ path: "/userProfile" });
+    },
+    gotoPage(path) {
+      // console.log(path)
+      this.$router.push({ path });
     }
   },
   computed: {
@@ -204,15 +238,22 @@ export default {
         this.$bvModal.hide("modal-login");
       }
     },
-    UsernameLogin() {
+    username() {
       return this.$store.state.username;
     }
   },
-  created: function() {
-    this.username = this.$store.state.username;
-  }
+  watch: {
+    search(value, old) {
+      this.$store.commit("FILTER", value);
+    }
+  },
+  created: function() {}
 };
 </script>
 
-<style scoped>
+<style scoped src="mdbvue/build/css/mdb.css">
+/* 
+#navperson{
+   color:#FFFFFF";
+} */
 </style>

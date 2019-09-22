@@ -14,12 +14,12 @@ class CartController{
             // console.log(cart,"masuk ke cart create")
 
             if (cart){
-                console.log("masuk ke false", cart.status)
+                // console.log("masuk ke false", cart.status)
                 let totalAmount = Number(cart.amount)+ Number(amount)
                 return cart.updateOne({amount:totalAmount},{new:true})
             }
             else{
-                console.log("masuk ke true")
+                // console.log("masuk ke true")
                 return Cart.create({ProductId,amount,UserId})
 
             }

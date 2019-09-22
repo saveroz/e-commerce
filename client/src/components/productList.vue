@@ -13,22 +13,23 @@
 import product from './product'
 
 export default {
+  props : {
+    allProducts : Array
+  },
   components: {
     product
   },
   mounted: function () {
-    this.$store.dispatch('getAllProducts')
+    
   },
   computed: {
 
-    allProducts () {
-      return this.$store.state.allProducts
-    }
+   
   }
 
 }
 </script>
 
-<style scoped>
+<style >
 
 </style>

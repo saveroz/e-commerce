@@ -1,41 +1,41 @@
 <template>
-  <div class="container">
-    <h2 class="text-center mt-4 mb-4">Transaction History</h2>
+  <div>
+    <h3 class="text-center mt-4 mb-4">Transaction History</h3>
 
     <v-tabs background-color="#757575" fixed-tabs dark icons-and-text>
       <v-tabs-slider></v-tabs-slider>
 
-      <v-tab @click="status='pending'" href="#tab-1">
+      <v-tab @click="changeStatus('pending')" href="#tab-1">
         Pending
         <i class="material-icons">confirmation_number</i>
       </v-tab>
 
-      <v-tab @click="status='delivered'" href="#tab-2">
+      <v-tab @click="changeStatus('delivered')" href="#tab-2">
         Delivered
         <i class="material-icons">directions_bike</i>
       </v-tab>
 
-      <v-tab @click="status='received'" href="#tab-3">
+      <v-tab @click="changeStatus('received')" href="#tab-3">
         Received
         <i class="material-icons">home</i>
       </v-tab>
     </v-tabs>
+
     <table class="table">
       <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Product</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Price</th>
-          <th scope="col">Total Price</th>
-          <th scope="col">Date</th>
-          <th scope="col">status</th>
-          <th v-if="status==='delivered'" scope="col">options</th>
-        </tr>
+        <th scope="col">#</th>
+        <th scope="col">Product</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+        <th scope="col">Total Price</th>
+        <th scope="col">Date</th>
+        <th scope="col">status</th>
+        <th scope="col">Buyer</th>
+        <th v-if="status==='pending'" scope="col">option</th>
       </thead>
       <tbody>
-        <tr v-for="(transaction,index) in userTransactions" :key="index">
-          <th scope="row">{{index+1}}</th>
+        <tr v-for="(transaction,index) in transactions" :key="index">
+          <td>{{index+1}}</td>
           <td>
             <li v-for="(cart,index) in transaction.CartId" :key="index">{{cart.ProductId.name}}</li>
           </td>
@@ -51,11 +51,14 @@
           <td>{{changeToDollar(transaction.totalPrice)}}</td>
           <td>{{convertDate(transaction.createdAt)}}</td>
           <td>{{transaction.status}}</td>
-          <td v-if="status==='delivered'">
+          <td>{{transaction.UserId.username}}</td>
+          <td>
             <v-btn
               color="#E0E0E0"
-              @click="updateTransaction('received', transaction._id)"
-            >received</v-btn>
+              v-if="status==='pending'"
+              @click="updateTransaction('delivered',transaction._id)"
+            >deliver
+            </v-btn>
           </td>
         </tr>
       </tbody>
@@ -65,14 +68,13 @@
 
 <script>
 import convertToDollar from "../helpers/convertDollar";
-
 export default {
-  name: "transactionHistoryPage",
   data() {
     return {
       status: "pending"
     };
   },
+
   methods: {
     changeToDollar(Number) {
       return convertToDollar(Number);
@@ -85,6 +87,12 @@ export default {
         day: "numeric"
       });
     },
+    changeStatus(status) {
+      // console.log("status==")
+      this.status = status;
+      // console.log(this.status)
+      // console.log(status==this.status ,"change Status")
+    },
     updateTransaction(status, id) {
       console.log(status);
       console.log(id);
@@ -96,14 +104,18 @@ export default {
     }
   },
   computed: {
-    userTransactions() {
-      return this.$store.state.userTransactions.filter(el => {
+    transactions() {
+      //   console.log(this.status)
+      console.log(this.status, "computed");
+      return this.$store.state.allTransactions.filter(el => {
+        console.log(el.status == this.status);
         return el.status == this.status;
       });
     }
   },
-  mounted() {
-    this.$store.dispatch("getAllUserTransactions");
+
+  created() {
+    this.$store.dispatch("getAllTransactions");
   }
 };
 </script>

@@ -11,7 +11,7 @@ function authentication(req,res,next){
         const decode = jwt.verify(token, Secret)
         req.decode = decode
         let id = req.decode.id
-        console.log(req.decode)
+        // console.log(req.decode)
 
         User.findById(id)
         .then(user=>{

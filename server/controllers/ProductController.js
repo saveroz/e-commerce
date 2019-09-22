@@ -5,7 +5,8 @@ class ProductController{
     static create(req, res, next){
 
         console.log('masuk ke product create')
-        console.log(req.body.image)
+        // console.log(req.body.image)
+        console.log(typeof req.body.price)
         let image=null
         if (req.file){
             image = req.file.cloudStoragePublicUrl 

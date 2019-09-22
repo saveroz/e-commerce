@@ -19,7 +19,7 @@
           <td>{{cart.amount}}</td>
           <td v-text="getSubTotal(cart)"></td>
           <td>
-            <button @click="removeCart(cart._id)" class="btn btn-secondary">remove</button>
+            <v-btn @click="removeCart(cart._id)" color="#E0E0E0">remove</v-btn>
           </td>
         </tr>
         <tr>
@@ -32,7 +32,7 @@
       </tbody>
     </table>
     <div style="display:flex;justify-content:center">
-      <button class="btn btn-secondary" @click="createTransaction">Checkout</button>
+      <v-btn color="#E0E0E0" @click="createTransaction">Checkout</v-btn>
     </div>
   </div>
 </template>

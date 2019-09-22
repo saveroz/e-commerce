@@ -24,11 +24,11 @@
                 style="width:4rem;"
               ></b-input>
 
-              <button
+              <v-btn
                 v-if="theProduct.stock>0"
-                class="btn btn-secondary"
+                color="#E0E0E0"
                 @click.prevent="addToCart"
-              >Add To Cart</button>
+              >Add To Cart</v-btn>
               <button
                 v-if="theProduct.stock<=0"
                 class="btn btn-secondary"

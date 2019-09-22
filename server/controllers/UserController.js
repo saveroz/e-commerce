@@ -86,7 +86,7 @@ class UserController{
                     'role' :user.role
                 }
                 let token = jwt.sign(userdata,Secret)
-                res.status(200).json({token,username:user.username,message:"You have Successfully Login"}) 
+                res.status(200).json({token,role:user.role,username:user.username,message:"You have Successfully Login"}) 
             }
             else{
                 next({status : 401, message : "invalid email/password"})

@@ -1,50 +1,56 @@
 <template>
-  <div >
+  <div>
     <navbar></navbar>
-    <router-view/>
-     <!-- <div>
+    <router-view />
+    <!-- <div>
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div> -->
+    </div>-->
   </div>
 </template>
 
 <script>
-import navbar from './components/navbar'
-import login from './components/loginForm'
+import navbar from "./components/navbar";
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    navbar,
-    login
+    navbar
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
   methods: {
+    getStatusLogin() {
+      let token = localStorage.getItem("token");
 
-    getStatusLogin () {
-      let token = localStorage.getItem('token')
       if (token) {
-        this.$store.commit('LOGIN_STATUS', true)
-      } else {
-        this.$store.commit('LOGIN_STATUS', false)
+        this.$store.commit("LOGIN_STATUS", true);
+        let username = localStorage.getItem("username");
+        let role = localStorage.getItem("role");
+        this.$store.commit("CURRENT_USER", {username,role});
+      } 
+      else {
+        this.$store.commit("LOGIN_STATUS", false);
+      }
+    },
+    goBack(){
+      let token = localStorage.getItem("token")
+      if(!token){
+        this.$router.push("/")
       }
     }
-
   },
-  created () {
-    this.getStatusLogin()
-  }
+  created() {
+    this.getStatusLogin();
+    this.goBack()
 
-}
+  }
+};
 </script>
 
 <style scoped>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

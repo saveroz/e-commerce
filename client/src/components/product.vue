@@ -1,19 +1,13 @@
 <template>
-<div class="col-4 mt-4">
- <div class="card w-75">
+<div class="col-3 mt-4">
+ <div class="card w-80 hoverable">
   <img :src="product.image" class="card-img-top" alt="...">
   <div class="card-body">
-    <p class="card-text">{{product.name}}</p>
-    <p class="card-text">{{product.description}}</p>
-    <p class="card-text">{{changeToDollar(product.price)}}</p>
-  </div>
-    <router-view/>
-  <div class="card-footer">
-     <router-link :to="'/productDetail/'+product._id" :detailedProduct="product" ><button class="btn btn-secondary" >Details</button></router-link>
-     <!-- <router-view/> -->
-  </div>
+    <p style="font-size:14px;">{{product.name}} <br> {{changeToDollar(product.price)}}</p>
 
-</div>
+     <router-link :to="'/productDetail/'+product._id" :detailedProduct="product" ><v-btn color="#E0E0E0">Buy</v-btn></router-link>
+  </div>
+ </div>
 </div>
 </template>
 
@@ -35,6 +29,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped src="mdbvue/build/css/mdb.css">
 
 </style>

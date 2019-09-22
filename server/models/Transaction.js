@@ -18,29 +18,21 @@ const transactionSchema = new Schema ({
     totalPrice: {
         type : Number,
         required: true
+    },
+    status : {
+        type : String
     }
 },{
     timestamps : true,
     versionKey : false
 })
+transactionSchema.pre("save", function(next){
+    if(!this.status){
+        this.status = "pending"
+    }
+    next()
+})
 
-// transactionSchema.pre("save", function(next){
-
-//     let UserId = this.UserId
-
-//     Cart.find({UserId})
-//     .then(allcarts=>{
-
-//         for(let cart of allcarts){
-
-//             Product.update()
-            
-//         }
-
-//     })
-
-
-// })
 
 const Transaction = mongoose.model("Transaction", transactionSchema)
 

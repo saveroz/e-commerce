@@ -12,7 +12,11 @@ const productSchema = new Schema ({
     },
     stock : {
         type : Number,
-        required : [true, "stock is required"]
+        required : [true, "stock is required"],
+        validate : {
+            validator : Number.isInteger,
+            message : "please input integer only"
+        }
     },
     image : {
         type : String,
@@ -22,20 +26,16 @@ const productSchema = new Schema ({
         type : Number,
         required : [true,"price is required"],
         validate : {
-            validator : function(){
-                if (typeof this.price== "Number"){
-                    return true
-                }
-                else {
-                    return false
-                }
-            }, message : "price must be a number"
+            validator : Number.isInteger,
+            message : "please input integer only"
         }
     }
 },{
     timestamps : true,
     versionKey : false
 })
+
+
 
 
 

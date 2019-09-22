@@ -1,5 +1,9 @@
 # e-commerce
 
+Tambahan untuk e-commerce 
+1. message untuk user ketika pemesanan telah dikirim
+2. memberikan rating terhadap produk yang sudah dibeli
+
 ##Link Deploy
  e-commerce.saveroz.com 
 

@@ -8,8 +8,11 @@
       <button class="btn btn-secondary">See Your Profile</button>
   </div> -->
   <div class="ml-4">
-    <router-link to="/userProfile/transactionHistory">
-    <button class="btn btn-secondary">Transaction History</button>
+    <router-link style="text-decoration: none;" to="/userProfile/transactionHistory">
+    <v-btn color="#E0E0E0" class="mr-4">Transaction History</v-btn>
+    </router-link>
+    <router-link style="text-decoration: none;" to="/userProfile/usercarts">
+    <v-btn color="#E0E0E0" class="ml-4">Carts</v-btn>
     </router-link>
   </div>
 </div>
@@ -34,6 +37,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
