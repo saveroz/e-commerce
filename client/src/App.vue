@@ -42,7 +42,7 @@ export default {
   },
   created() {
     this.getStatusLogin();
-    this.goBack()
+    // this.goBack()
 
   }
 };

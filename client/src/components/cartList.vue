@@ -15,7 +15,7 @@
         <tr v-for="(cart, index) in getAllCarts" :key="index">
           <th scope="row">{{index+1}}</th>
           <td>{{cart.ProductId.name}}</td>
-          <td>{{cart.ProductId.price}}</td>
+          <td>{{getPrice(cart.ProductId.price)}}</td>
           <td>{{cart.amount}}</td>
           <td v-text="getSubTotal(cart)"></td>
           <td>
@@ -54,8 +54,8 @@ export default {
       //   console.log(this.totalPrice);
       return convertToDollar(number)
     },
-    getTotalPrice () {
-      return convertToDollar(this.totalPrice)
+    getPrice (price) {
+      return convertToDollar(price)
     },
     createTransaction () {
       let totalPrice = this.totalPrice

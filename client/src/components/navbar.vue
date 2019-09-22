@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="light" variant="light">
-      <b-navbar-brand href="#">X Watch</b-navbar-brand>
+      <b-navbar-brand href="#" style="font-weight:bold;">X WATCH</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -86,7 +86,7 @@
     <v-navigation-drawer v-model="drawer" right absolute temporary>
       <v-list-item class="mt-5">
         <v-list-item-avatar large>
-          <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+          <v-img src="http://img06.deviantart.net/1293/i/2013/169/5/a/minimalist_aang_from_avatar_the_last_airbender_by_himehimine-d69n1lr.png"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-content class="ml-3">
